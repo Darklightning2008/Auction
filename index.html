@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#080c17">
+<title>IPL Auction Live</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#080c17;--s1:#0e1526;--s2:#141d34;--s3:#1c2846;--ln:rgba(255,255,255,.08);--ln2:rgba(255,255,255,.16);--tx:#eef2fa;--mu:#8e9ab3;--gold:#f2b53c;--gr:#3ddc97;--rd:#ff5a5f;--lc:#3b4a6b;--disp:"Barlow Condensed","Arial Narrow","Roboto Condensed",system-ui,sans-serif;--body:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.45 var(--body);min-height:100vh;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0);-webkit-tap-highlight-color:transparent}
+body:before{content:"";position:fixed;inset:0;background:radial-gradient(1000px 460px at 50% -140px,color-mix(in srgb,var(--lc) 34%,transparent),transparent 72%);pointer-events:none;z-index:0}
+.app{position:relative;z-index:1;max-width:1180px;margin:auto;padding:12px 16px 48px}
+.app.b{max-width:560px}.app.b.dk{padding-bottom:190px}
+h1{font:700 28px/1 var(--disp);letter-spacing:.01em;margin:2px 0 0}
+.muted{color:var(--mu);font-size:12px}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:6px 0 12px}
+.brand{display:flex;gap:12px;align-items:center;min-width:0}
+.brand h1{line-height:1.05}.app.b h1{font-size:24px}
+.logo{width:42px;height:42px;border-radius:11px;background:var(--gold);color:#1a1204;display:grid;place-items:center;font:700 17px var(--disp);flex:none}
+.eb{font-size:12px;color:var(--gold);font-weight:600}
+.livetag{display:inline-flex;align-items:center;gap:5px;font:600 12px var(--body);color:#ffb3b5;background:rgba(255,90,95,.14);border:1px solid rgba(255,90,95,.4);padding:2px 8px;border-radius:99px;vertical-align:middle;margin-left:6px;letter-spacing:.02em}
+.livetag i,.live i{width:7px;height:7px;border-radius:50%;background:var(--rd);animation:pl 1.2s infinite}
+@keyframes pl{50%{opacity:.35}}
+.conn{font-size:12px;color:var(--mu);display:flex;align-items:center;gap:6px;flex:none}
+.dot{width:8px;height:8px;border-radius:50%;background:#59647d;display:inline-block;flex:none}.dot.on{background:var(--gr);box-shadow:0 0 8px var(--gr)}.dot.warn{background:var(--gold)}
+.rlab{font-size:13px;color:var(--mu);margin:2px 0 6px}.rlab b{color:var(--tx);font-weight:600}
+.rsegs{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;margin-bottom:14px}.rsegs i{height:4px;border-radius:2px;background:var(--ln2)}.rsegs i.done{background:color-mix(in srgb,var(--gold) 50%,transparent)}.rsegs i.cur{background:var(--gold)}
+.tboard{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px}
+.tc{position:relative;background:var(--s1);border:1px solid var(--ln);border-radius:12px;padding:10px 12px 10px 16px;overflow:hidden;transition:box-shadow .25s,border-color .25s}
+.tc:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c)}
+.tc.lead{border-color:var(--c);box-shadow:0 0 0 1px var(--c),0 0 26px -8px var(--c)}
+.tc.gone{opacity:.42}
+.tc .h{display:flex;justify-content:space-between;align-items:center}
+.tc .id{font:700 22px/1 var(--disp);letter-spacing:.02em}
+.tc .pv{font:600 24px/1.1 var(--disp);margin-top:4px}.tc .pv small{font:500 12px var(--body);color:var(--mu);margin-left:3px}
+.tc .pb{height:3px;border-radius:2px;background:var(--ln2);margin:6px 0 5px;overflow:hidden}.tc .pb i{display:block;height:100%;background:var(--c)}
+.tc .sm{font-size:11.5px;color:var(--mu)}.tc .fl{font-size:11.5px;color:#ff9a9d;font-weight:600}
+.hgrid{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+.col{min-width:0}
+.card{background:var(--s1);border:1px solid var(--ln);border-radius:14px;padding:14px;margin-bottom:14px}
+.card-h{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+.card b{font-weight:600}
+.lot{position:relative;border-radius:18px;padding:18px;margin-bottom:14px;background:linear-gradient(160deg,color-mix(in srgb,var(--lc) 24%,var(--s2)),var(--s1) 72%);border:1px solid color-mix(in srgb,var(--lc) 55%,transparent);box-shadow:0 24px 60px -34px var(--lc);transition:border-color .3s,box-shadow .3s;min-height:200px}
+.lot.idle{display:flex;flex-direction:column;justify-content:center}
+.lot-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.pill{font-size:12px;font-weight:600;color:var(--mu);border:1px solid var(--ln2);border-radius:99px;padding:3px 10px}
+.live{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#ffb3b5}
+.paused{font-size:12px;font-weight:700;color:var(--gold)}
+.lot-main{display:flex;gap:16px;align-items:center;margin:16px 0 12px}
+.mono{width:72px;height:72px;border-radius:50%;flex:none;display:grid;place-items:center;font:700 30px var(--disp);letter-spacing:.02em;background:color-mix(in srgb,var(--lc) 30%,var(--s1));border:2px solid var(--lc)}
+.pname{font:700 clamp(34px,7vw,56px)/.95 var(--disp);letter-spacing:.005em;overflow-wrap:anywhere}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.chip{font-size:12px;color:var(--mu);border:1px solid var(--ln2);border-radius:6px;padding:2px 8px}
+.chip[style*="--k"]{color:var(--k);border-color:color-mix(in srgb,var(--k) 55%,transparent)}
+.bidrow{display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+.lbl{font-size:12px;color:var(--mu)}
+.bidv{font:700 clamp(46px,11vw,70px)/1 var(--disp);color:var(--gold)}.bidv small{font:500 18px var(--body);color:var(--mu);margin-left:6px}
+.bidv.pop{animation:pop .45s ease-out}
+@keyframes pop{0%{transform:scale(.92);opacity:.5}60%{transform:scale(1.05)}100%{transform:none;opacity:1}}
+.leader{text-align:right;min-width:0}.leader b{display:block;font:700 30px/1 var(--disp);color:var(--lc);overflow:hidden;text-overflow:ellipsis}
+.leader.you b{color:var(--gr)}
+.call{margin-top:10px;font:700 26px var(--disp);color:var(--rd);animation:pl 1s infinite}
+.outs{margin-top:10px;font-size:12px;color:var(--mu)}
+.sold{font:600 22px/1.2 var(--disp)}.sold em{font-style:normal;color:var(--gold)}
+.btn{border:1px solid var(--ln2);background:var(--s3);color:var(--tx);padding:11px 14px;border-radius:10px;font:600 14px var(--body);cursor:pointer;transition:background .15s,transform .05s}
+.btn:hover:not(:disabled){background:#24335a}.btn:active:not(:disabled){transform:scale(.98)}
+.btn:focus-visible,.tabs button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn.gold{background:var(--gold);border-color:var(--gold);color:#1a1204}.btn.gold:hover:not(:disabled){background:#ffc65a}
+.btn.red{background:rgba(255,90,95,.12);border-color:rgba(255,90,95,.45);color:#ffb3b5}
+.btn.sm{padding:7px 10px;font-size:12px}
+.btn.xl{width:100%;padding:15px;font:700 26px var(--disp);letter-spacing:.03em}
+.row{display:flex;gap:8px;margin-top:8px}.row>*{flex:1;min-width:0}
+input,select{width:100%;background:#0a1020;color:var(--tx);border:1px solid var(--ln2);border-radius:10px;padding:11px;font:inherit}
+.tabs{display:flex;gap:4px;overflow-x:auto;background:var(--s1);padding:4px;border-radius:12px;border:1px solid var(--ln);margin-bottom:12px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:1 0 auto;padding:8px 14px;border-radius:8px;background:transparent;color:var(--mu);font:600 13px var(--body);border:0;cursor:pointer;white-space:nowrap}
+.tabs button.on{background:var(--s3);color:var(--tx)}
+.list{border:1px solid var(--ln);border-radius:12px;overflow:hidden;background:var(--s1)}
+.scroll{max-height:440px;overflow:auto}
+.row-i{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--ln)}
+.row-i:last-child{border-bottom:0}
+.row-i.clk{cursor:pointer}.row-i.clk:hover{background:var(--s2)}
+.ri-l b{display:block;font-weight:600}.ri-l span{color:var(--mu);font-size:12px}
+.ri-r{font:600 19px var(--disp);color:var(--gold);white-space:nowrap}.ed{padding:0 4px;cursor:pointer;color:var(--mu)}
+.empty{padding:16px;color:var(--mu);text-align:center;font-size:13px}
+.alert{background:rgba(255,90,95,.12);border:1px solid rgba(255,90,95,.4);color:#ffd0d2;padding:10px 12px;border-radius:10px;margin-bottom:10px;font-weight:600;font-size:13px}
+.warn{color:#ffbd85;font-size:12px;min-height:16px;margin-top:6px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.stat{background:var(--s1);border:1px solid var(--ln);border-left:4px solid var(--c);border-radius:12px;padding:9px 12px}
+.stat small{display:block;color:var(--mu);font-size:11.5px}.stat .v{font:600 22px/1.2 var(--disp);white-space:nowrap}
+.tm{background:var(--s1);border:1px solid var(--ln);border-left:4px solid var(--c);border-radius:12px;padding:12px;margin-bottom:10px}.tm.gone{opacity:.55}
+.tm-h{display:flex;align-items:center;gap:8px}.tm-h .muted{margin-left:auto}
+.code{font:700 28px/1.2 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.08em;margin:8px 0 2px;color:var(--tx);user-select:all}
+details{background:var(--s1);border:1px solid var(--ln);border-radius:12px;padding:0 12px;margin-bottom:8px}
+summary{cursor:pointer;padding:11px 0;font-weight:600}
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:5;background:color-mix(in srgb,var(--s1) 94%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--ln2);padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px))}
+.dk{max-width:560px;margin:auto}
+.bb{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bb .btn{padding:10px;display:flex;flex-direction:column;align-items:center;gap:0}.bb small{font:500 12px var(--body);opacity:.8}.bb b{font:700 26px/1.1 var(--disp)}
+.wo{width:100%;margin-top:8px;padding:9px}
+.spin{width:26px;height:26px;border-radius:50%;border:3px solid var(--ln2);border-top-color:var(--gold);animation:sp 1s linear infinite;margin:0 auto 12px}@keyframes sp{to{transform:rotate(360deg)}}
+.join{max-width:460px;margin:8vh auto 0}
+.join h1{font-size:44px;margin:6px 0 4px}.join input{font:700 24px ui-monospace,Menlo,Consolas,monospace;letter-spacing:.1em;text-align:center;text-transform:uppercase;padding:14px}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,10px);background:var(--gold);color:#1a1204;padding:10px 16px;border-radius:10px;font-weight:700;opacity:0;transition:.2s;pointer-events:none;z-index:20;max-width:90vw;text-align:center}.toast.on{opacity:1;transform:translate(-50%,0)}
+.sep{height:1px;background:var(--ln);margin:12px 0}
+@media(min-width:700px){.tboard{grid-template-columns:repeat(5,1fr)}}
+@media(min-width:980px){.hgrid{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body>
+<div class="app" id="app"><div class="card">Loading…</div></div>
+<div class="toast" id="toast"></div>
+<script>(function(){var u=['https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.5.4/peerjs.min.js','https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js','https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js'],i=0;function n(){if(window.Peer||i>=u.length)return;var s=document.createElement('script');s.src=u[i++];s.onerror=n;document.head.appendChild(s)}n()})()</script>
+<script>
+const C={IN:'India',SA:'South Africa',AU:'Australia',EN:'England',WI:'West Indies',NZ:'New Zealand',AF:'Afghanistan',SL:'Sri Lanka',PK:'Pakistan'};
+const RL={Bat:'Batter',WK:'Wicketkeeper',AR:'All-rounder',Fast:'Fast bowler',Spin:'Spinner',Legend:'Legend'};
+const T=[{id:'MI',name:'Mumbai Indians',c:'#3b82f6'},{id:'CSK',name:'Chennai Super Kings',c:'#fbbf24'},{id:'RCB',name:'Royal Challengers Bengaluru',c:'#ef4444'},{id:'KKR',name:'Kolkata Knight Riders',c:'#a855f7'},{id:'DC',name:'Delhi Capitals',c:'#818cf8'},{id:'SRH',name:'Sunrisers Hyderabad',c:'#fb923c'},{id:'RR',name:'Rajasthan Royals',c:'#ec4899'},{id:'PBKS',name:'Punjab Kings',c:'#fca5a5'},{id:'LSG',name:'Lucknow Super Giants',c:'#2dd4bf'},{id:'GT',name:'Gujarat Titans',c:'#a3e635'}];
+const D=[
+['Bat','IN','Virat Kohli,Rohit Sharma,Shubman Gill,Yashasvi Jaiswal,Suryakumar Yadav,Ruturaj Gaikwad,Rinku Singh,Tilak Varma,Abhishek Sharma,Rajat Patidar,Prithvi Shaw,Devdutt Padikkal,Shreyas Iyer,Sai Sudharsan,Naman Dhir,Ayush Mhatre,Vaibhav Suryavanshi,Priyansh Arya,Ashutosh Sharma,Shashank Singh,Sarfaraz Khan,Nehal Wadhera,Karun Nair,Ajinkya Rahane'],
+['Bat','SA','David Miller,Aiden Markram,Faf du Plessis'],['Bat','AU','Travis Head,Jake Fraser-McGurk,Tim David'],['Bat','NZ','Rachin Ravindra,Finn Allen'],['Bat','WI','Shimron Hetmyer'],['Bat','SL','Pathum Nissanka'],
+['WK','IN','Sanju Samson,Rishabh Pant,Jitesh Sharma,MS Dhoni,Ishan Kishan,Dhruv Jurel,Abhishek Porel'],['WK','EN','Jos Buttler,Phil Salt'],['WK','SA','Heinrich Klaasen,Quinton de Kock,Ryan Rickelton'],['WK','WI','Nicholas Pooran'],['WK','NZ','Devon Conway'],['WK','AF','Rahmanullah Gurbaz'],
+['AR','IN','Hardik Pandya,Ravindra Jadeja,Shivam Dube,Riyan Parag,Venkatesh Iyer,Axar Patel,Washington Sundar,Krunal Pandya,Nitish Kumar Reddy,Ravichandran Ashwin,Rahul Tewatia,Harshal Patel'],['AR','AU','Cameron Green,Marcus Stoinis,Mitchell Marsh'],['AR','AF','Rashid Khan,Azmatullah Omarzai'],['AR','EN','Liam Livingstone,Sam Curran'],['AR','WI','Sunil Narine,Romario Shepherd,Jason Holder'],['AR','SA','Marco Jansen'],['AR','NZ','Mitchell Santner'],
+['Fast','IN','Jasprit Bumrah,Arshdeep Singh,Mohammed Siraj,Bhuvneshwar Kumar,Mohammed Shami,Avesh Khan,Mayank Yadav,T Natarajan,Mukesh Kumar,Khaleel Ahmed,Prasidh Krishna,Deepak Chahar,Harshit Rana,Akash Deep,Yash Dayal'],['Fast','AU','Mitchell Starc,Pat Cummins,Josh Hazlewood'],['Fast','SA','Kagiso Rabada,Anrich Nortje,Lungi Ngidi'],['Fast','SL','Matheesha Pathirana,Dushmantha Chameera'],['Fast','NZ','Trent Boult,Lockie Ferguson'],['Fast','EN','Jofra Archer'],['Fast','AF','Fazalhaq Farooqi'],
+['Spin','IN','Yuzvendra Chahal,Kuldeep Yadav,Ravi Bishnoi,Varun Chakravarthy,Rahul Chahar,Sai Kishore,Suyash Sharma'],['Spin','AF','Noor Ahmad,Mujeeb Ur Rahman'],['Spin','SL','Maheesh Theekshana,Wanindu Hasaranga'],['Spin','AU','Adam Zampa'],['Spin','WI','Akeal Hosein'],
+['Legend','IN','Sachin Tendulkar,Virender Sehwag,Suresh Raina,Yuvraj Singh,Anil Kumble,Harbhajan Singh,Rahul Dravid,Gautam Gambhir,Sourav Ganguly,Zaheer Khan,Ashish Nehra,Dinesh Karthik,Shikhar Dhawan,Robin Uthappa'],['Legend','WI','Chris Gayle,Kieron Pollard,Dwayne Bravo,Brian Lara'],['Legend','SA','AB de Villiers,Jacques Kallis,Dale Steyn,Graeme Smith'],['Legend','AU','Shane Watson,Shane Warne,Adam Gilchrist,Ricky Ponting,Glenn McGrath,Matthew Hayden'],['Legend','SL','Lasith Malinga,Muttiah Muralitharan'],['Legend','NZ','Brendon McCullum'],['Legend','PK','Shoaib Akhtar'],['Legend','EN','Kevin Pietersen']];
+D.push(['Bat','IN','Nitish Rana,Sameer Rizvi,Angkrish Raghuvanshi,Manish Pandey,Rahul Tripathi,Abdul Samad,Mayank Agarwal'],['Bat','WI','Sherfane Rutherford'],['WK','IN','Kumar Kushagra,Urvil Patel,Robin Minz,Anuj Rawat'],['AR','IN','Shahbaz Ahmed,Shahrukh Khan,Ramakrishna Ghosh'],['AR','WI','Rovman Powell'],['AR','AU','Cooper Connolly'],['Fast','IN','Umran Malik,Vaibhav Arora,Sandeep Sharma,Tushar Deshpande,Mukesh Choudhary,Kartik Tyagi,Rasikh Salam,Arshad Khan,Ashok Sharma,Naman Tiwari,Mohsin Khan'],['Fast','SA','Nandre Burger'],['Fast','NZ','Jacob Duffy'],['Fast','AU','Spencer Johnson,Xavier Bartlett'],['Spin','IN','Mayank Markande,Shreyas Gopal,Manav Suthar,Vignesh Puthur,Praveen Dubey,Harpreet Brar,Vipraj Nigam,Digvesh Rathi,Shivang Kumar'],['Legend','IN','Yusuf Pathan,Irfan Pathan,Ambati Rayudu,RP Singh,Pragyan Ojha,Amit Mishra,Sunil Gavaskar'],['Legend','AU','Andrew Symonds,Michael Hussey'],['Legend','NZ','Shane Bond']);
+const marq=new Set('Virat Kohli,Rohit Sharma,Shubman Gill,Yashasvi Jaiswal,Suryakumar Yadav,Jasprit Bumrah,Rishabh Pant,Hardik Pandya,Ravindra Jadeja,Jos Buttler,Sanju Samson,Shreyas Iyer,Rashid Khan,Travis Head,Heinrich Klaasen,Nicholas Pooran,Cameron Green,Mitchell Starc,Pat Cummins,Kagiso Rabada,Arshdeep Singh,Yuzvendra Chahal,Ruturaj Gaikwad,MS Dhoni'.split(','));
+const prem=new Set('David Miller,Tilak Varma,Rinku Singh,Abhishek Sharma,Phil Salt,Liam Livingstone,Sunil Narine,Matheesha Pathirana,Kuldeep Yadav,Mohammed Siraj'.split(','));
+const RD=['Marquee','Batters','Wicketkeepers','All-rounders','Fast bowlers','Spinners','Legends','Unsold'];
+const PL=[];D.forEach(([r,c,s])=>s.split(',').forEach(n=>PL.push({id:'p'+PL.length,name:n,cc:c,country:C[c],role:r,base:r==='Legend'?1:marq.has(n)?2:prem.has(n)?1:.3})));
+const $=id=>document.getElementById(id);
+const r2=n=>Math.round(n*100)/100,fm=n=>'₹'+r2(n).toFixed(2)+' Cr',fmH=n=>'₹'+r2(n).toFixed(2)+'<small>Cr</small>';
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ls={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{v===null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}}};
+const pl=id=>PL.find(p=>p.id===id),tm=id=>T.find(t=>t.id===id);
+const AL='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',rk=n=>{let s='';for(let i=0;i<n;i++)s+=AL[Math.floor(Math.random()*AL.length)];return s};
+const RC={Bat:'#5aa9ff',WK:'#c28bff',AR:'#3ddc97',Fast:'#ff7a7a',Spin:'#ffc85a',Legend:'#f2b53c'},RS={Bat:'Batter',WK:'Keeper',AR:'All-rounder',Fast:'Pace',Spin:'Spin',Legend:'Legend'};
+const NEW=()=>({budget:120,ps:{},cur:null,log:[],seq:0,adj:{},phase:'auction',fin:{},trades:[],tseq:0,bp:{},custom:[],cseq:0,rd:0,tick:5,autoOn:false,codes:{},gone:{},v:0});
+let S=NEW(),mode=null,built=null,peer,hc,conns=[],got=false,rt=0,lastPong=0,cstart=0,tt,lastKey='',armK='',armT;
+const tab={h:'pool',b:'squad'},gets=new Set(),gives=new Set(),openT=new Set();let wasRisk=false;
+const code=ls.get('iplCode')||rk(5);
+function parse(s){s=(s||'').toUpperCase().replace(/[^A-Z0-9]/g,'');return s.length>=9?{room:s.slice(0,5),key:s.slice(5,9)}:null}
+(function(){const m=ls.get('iplMode'),h=parse(location.hash.slice(1));if(m==='host')mode='host';else if(h){ls.set('iplRoom',h.room);ls.set('iplKey',h.key);ls.set('iplMode',null);mode='join'}else if(m&&tm(m)&&ls.get('iplRoom')&&ls.get('iplKey'))mode=m})();
+
+/* ---------- core rules ---------- */
+const gone=id=>!!S.gone[id],AT=()=>T.filter(t=>!gone(t.id));
+const online=id=>conns.some(c=>c.open&&c.team===id);
+function norm(d){const r=Object.assign(NEW(),d);r.budget=r.budget||120;r.tick=r.tick||5;addCustom(r.custom);return r}
+function pub(){return Object.assign({},S,{codes:{}})}
+function info(t){const ros=PL.filter(p=>{const x=S.ps[p.id];return x&&x.s==='S'&&x.t===t});const spent=r2(ros.reduce((a,p)=>a+S.ps[p.id].p,0));return{ros,spent,left:r2(S.budget+(S.adj[t]||0)-spent),os:ros.filter(p=>p.cc!=='IN').length}}
+function check(t,p,amt){const i=info(t);if(amt>i.left+1e-9)return'Only '+fm(i.left)+' left in your purse';if(i.ros.length>=25)return'Squad is full (25)';if(p.cc!=='IN'&&i.os>=8)return'Overseas limit (8) reached';const rem=Math.max(0,14-i.ros.length)*.3;if(amt+rem>i.left+1e-9)return'Keep '+fm(rem)+' aside to reach the 15-player minimum';return''}
+const dom=p=>p.cc==='IN'?'Domestic':'Overseas';
+const bp=p=>S.bp[p.id]!=null?S.bp[p.id]:p.base;
+function rOf(p){if(p.r!=null)return p.r;if(marq.has(p.name))return 0;return p.role==='Legend'?6:{Bat:1,WK:2,AR:3,Fast:4,Spin:5}[p.role]}
+function eligible(p){const x=S.ps[p.id];return S.rd<7?(!x&&rOf(p)===S.rd):!!(x&&x.s==='U')}
+function rtxt(){return'Round '+(S.rd+1)+' of 8 · '+RD[S.rd]}
+function addCustom(l){(l||[]).forEach(o=>{if(!PL.some(p=>p.id===o.id))PL.push(Object.assign({},o))})}
+function risk(t){const i=info(t);return i.ros.length<15&&i.left<S.budget*.25}
+function genCodes(){let ch=false;const used=new Set(Object.values(S.codes));T.forEach(t=>{if(!S.codes[t.id]){let k;do{k=rk(4)}while(used.has(k));used.add(k);S.codes[t.id]=k;ch=true}});return ch}
+
+/* ---------- host actions ---------- */
+function push(){S.v=(S.v||0)+1;ls.set('iplHostState',JSON.stringify(S));const m={t:'state',s:pub()};conns.forEach(c=>{if(c.open&&c.team)try{c.send(m)}catch(e){}});render()}
+function nominate(id){const p=pl(id);S.seq++;S.cur={id,n:S.seq,base:bp(p),bid:bp(p),team:null,out:[],open:true,cd:0,cdt:Date.now(),auto:S.autoOn};push()}
+function sell(){const c=S.cur;if(!c||!c.team)return toast('No bids yet');const pv=S.ps[c.id]||null;S.ps[c.id]={s:'S',t:c.team,p:c.bid};S.log.push({id:c.id,a:'S',t:c.team,p:c.bid,pv});S.cur=null;push()}
+function unsold(){const c=S.cur;if(!c)return;const pv=S.ps[c.id]||null;S.ps[c.id]={s:S.rd>=7?'X':'U'};S.log.push({id:c.id,a:'U',pv});S.cur=null;push()}
+function undo(){if(S.phase!=='auction')return toast('Undo only works during the auction');const a=S.log.pop();if(!a)return;if(a.pv)S.ps[a.id]=a.pv;else delete S.ps[a.id];S.cur=null;push()}
+function nextP(rand){if(S.phase!=='auction')return toast('The auction phase is over');const a=PL.filter(eligible);if(!a.length)return toast(S.rd<7?'Round complete. Start the next round':'Final round complete. End the auction');nominate((rand?a[Math.floor(Math.random()*a.length)]:a[0]).id)}
+function nextRound(){if(S.cur)return toast('Sell or mark unsold first');if(S.phase!=='auction'||S.rd>=7)return;const left=PL.filter(eligible).length;if(left&&!confirm(left+' players are still left in this round. Move them to the unsold round and continue?'))return;PL.filter(p=>!S.ps[p.id]&&rOf(p)===S.rd).forEach(p=>S.ps[p.id]={s:'U'});S.rd++;push();toast(rtxt()+' started')}
+function callStep(){const c=S.cur;if(!c||!c.open)return;c.auto=false;if((c.cd||0)<3){c.cd=(c.cd||0)+1;c.cdt=Date.now();push()}else c.team?sell():unsold()}
+function toggleAuto(){S.autoOn=!S.autoOn;if(S.cur){S.cur.auto=S.autoOn;S.cur.cd=0;S.cur.cdt=Date.now()}push()}
+function editBase(id){const p=pl(id),c=S.cur;if(c&&c.id===id&&c.team)return toast('Bids already placed');const v=r2(parseFloat(prompt('New base price for '+p.name+' (₹ Cr)',bp(p))));if(!(v>0))return;S.bp[id]=v;if(c&&c.id===id){c.base=c.bid=v}push()}
+function addPlayer(){const name=$('an').value.trim();if(!name)return toast('Enter a player name');if(PL.some(p=>p.name.toLowerCase()===name.toLowerCase()))return toast('That player is already in the pool');const dm=$('ad').value==='D',base=r2(parseFloat($('ab').value)||0.3);if(!(base>0))return toast('Enter a valid base price');const o={id:'c'+(++S.cseq),name,cc:dm?'IN':'XX',country:dm?'India':($('ac').value.trim()||'Overseas'),role:$('ar').value,base,r:$('ao').value===''?null:+$('ao').value};S.custom.push(o);addCustom([o]);if(rOf(pl(o.id))<S.rd)S.ps[o.id]={s:'U'};$('an').value=$('ac').value=$('ab').value='';toast(name+' added to the pool');push()}
+function endAuction(){if(S.cur)return toast('Sell or mark unsold first');S.phase='finalise';S.fin={};push()}
+function backAuction(){if(S.trades.length)return toast('Trades have already started');S.phase='auction';S.fin={};push()}
+function closeTrade(){S.phase='done';push()}
+function finDone(){const a=AT();return a.length&&a.every(x=>S.fin[x.id])}
+function kick(id,why){conns.filter(c=>c.team===id).forEach(c=>{try{c.send({t:'denied',why});setTimeout(()=>{try{c.close()}catch(e){}},300)}catch(e){}})}
+function removeTeam(id){S.gone[id]=true;kick(id,'The auctioneer removed your team from this auction');const c=S.cur;if(c&&c.team===id){c.team=null;c.bid=c.base}if(S.phase==='finalise'&&finDone())S.phase='trade';push();toast(id+' removed')}
+function restoreTeam(id){delete S.gone[id];push();toast(id+' restored')}
+function newCode(id){const used=new Set(Object.values(S.codes));let k;do{k=rk(4)}while(used.has(k));S.codes[id]=k;kick(id,'Your team code was changed. Ask the auctioneer for the new one');push();toast('New code for '+id)}
+const full=id=>code+'-'+(S.codes[id]||''),link=id=>location.origin+location.pathname+'#'+code+(S.codes[id]||'');
+function cp(t,m){try{navigator.clipboard.writeText(t).then(()=>toast(m),()=>cpf(t,m))}catch(e){cpf(t,m)}}
+function cpf(t,m){const a=document.createElement('textarea');a.value=t;a.style.cssText='position:fixed;opacity:0';document.body.appendChild(a);a.select();try{document.execCommand('copy');toast(m)}catch(e){toast('Copy failed. Select the code manually')}a.remove()}
+function arm(k){if(armK===k){armK='';clearTimeout(armT);return true}armK=k;clearTimeout(armT);armT=setTimeout(()=>{armK='';render()},3000);render();return false}
+
+/* ---------- host: handle messages from bidders (team comes from the connection) ---------- */
+function handleBid(t,b){const c=S.cur;if(gone(t))return'Your team was removed';if(S.phase!=='auction'||!c||!c.open||!b||b.lot!==c.n||b.pid!==c.id)return'Bidding is closed for this player';if((c.out||[]).includes(t))return'You walked out of this player';if(t===c.team)return'You already lead this bid';const amt=r2(Number(b.amt));if(!(c.team?amt>c.bid:amt>=c.base))return'Bid must be above '+fm(c.bid);const e=check(t,pl(c.id),amt);if(e)return e;c.bid=amt;c.team=t;c.cd=0;c.cdt=Date.now();push();return''}
+function handleOut(t,b){const c=S.cur;if(gone(t))return'Your team was removed';if(S.phase!=='auction'||!c||!c.open||!b||b.lot!==c.n||b.pid!==c.id)return'This player is no longer on the block';if(t===c.team)return"You're leading, so you can't walk out";c.out=c.out||[];if(c.out.includes(t))return'';c.out.push(t);if(!c.team&&AT().every(x=>c.out.includes(x.id))){unsold();return''}push();return''}
+function handleFin(t){if(S.phase!=='finalise'||gone(t))return;const i=info(t);if(i.ros.length<15||i.ros.length>25||i.os>8)return;S.fin[t]=true;if(finDone())S.phase='trade';push()}
+function tradeErr(tr){const sim=t=>{const i=info(t);return{n:i.ros.length,os:i.os,left:i.left}};const a=sim(tr.from),b=sim(tr.to);
+for(const id of tr.get)if(!(S.ps[id]&&S.ps[id].t===tr.to))return'A player is no longer available';for(const id of tr.give)if(!(S.ps[id]&&S.ps[id].t===tr.from))return'A player is no longer available';
+const mv=(ids,x,y)=>ids.forEach(id=>{x.n--;y.n++;if(pl(id).cc!=='IN'){x.os--;y.os++}});mv(tr.get,b,a);mv(tr.give,a,b);a.left-=tr.cash;b.left+=tr.cash;
+for(const [n,x] of [[tr.from,a],[tr.to,b]]){if(x.n<15)return n+' would drop below 15 players';if(x.n>25)return n+' would exceed 25 players';if(x.os>8)return n+' would exceed 8 overseas';if(x.left<-1e-9)return n+' cannot afford this'}return''}
+function mvp(id,to){const x=S.ps[id],f=x.t;S.adj[to]=r2((S.adj[to]||0)+x.p);S.adj[f]=r2((S.adj[f]||0)-x.p);x.t=to}
+function execTrade(tr){tr.get.forEach(id=>mvp(id,tr.from));tr.give.forEach(id=>mvp(id,tr.to));S.adj[tr.from]=r2((S.adj[tr.from]||0)-tr.cash);S.adj[tr.to]=r2((S.adj[tr.to]||0)+tr.cash)}
+function handleTrade(t,m){if(S.phase!=='trade'||!tm(t)||gone(t))return;
+if(m.op==='new'){const o=m.tr||{};if(!tm(o.to)||o.to===t||gone(o.to))return;const ok=(ids,own)=>(Array.isArray(ids)?ids:[]).filter(id=>S.ps[id]&&S.ps[id].s==='S'&&S.ps[id].t===own);const get=ok(o.get,o.to),give=ok(o.give,t),cash=r2(Number(o.cash)||0);if(!get.length&&!give.length&&!cash)return;S.trades.push({id:++S.tseq,from:t,to:o.to,get,give,cash,note:String(o.note||'').slice(0,80),st:'pending',msg:''});return push()}
+const tr=S.trades.find(x=>x.id===m.id);if(!tr||tr.st!=='pending')return;
+if(m.op==='cancel'&&tr.from===t){tr.st='cancelled';return push()}
+if(m.op==='reject'&&tr.to===t){tr.st='rejected';return push()}
+if(m.op==='accept'&&tr.to===t){const e=tradeErr(tr);if(e){tr.st='failed';tr.msg=e}else{execTrade(tr);tr.st='accepted'}push()}}
+function onMsg(c,m){if(!m)return;
+if(m.t==='join'){const key=String(m.key||'').toUpperCase(),id=Object.keys(S.codes).find(k=>S.codes[k]===key);
+if(!id)return c.send({t:'denied',why:'That team code is not valid. Check it with the auctioneer'});
+if(gone(id))return c.send({t:'denied',why:'The auctioneer removed this team from the auction'});
+conns.filter(x=>x!==c&&x.team===id).forEach(x=>{try{x.send({t:'denied',why:'This team signed in on another device',soft:1});setTimeout(()=>{try{x.close()}catch(e){}},300)}catch(e){}});
+conns=conns.filter(x=>x===c||x.team!==id);c.team=id;if(!conns.includes(c))conns.push(c);c.send({t:'joined',team:id,s:pub()});toast(id+' joined');render();return}
+if(!c.team)return;
+if(m.t==='ping'){c.send({t:'pong'});if(m.v!==S.v)c.send({t:'state',s:pub()});return}
+let e='';
+if(m.t==='bid')e=handleBid(c.team,m.b);else if(m.t==='out')e=handleOut(c.team,m.b);else if(m.t==='fin')handleFin(c.team);else if(m.t==='trade')handleTrade(c.team,m);
+if(e){c.send({t:'msg',m:e});c.send({t:'state',s:pub()})}}
+
+/* ---------- networking ---------- */
+function needPeer(f){if(window.Peer)return f();let t=0;const iv=setInterval(()=>{if(window.Peer){clearInterval(iv);f()}else if(++t>40){clearInterval(iv);toast('Could not load the PeerJS library. Check your internet connection.')}},250)}
+function loadHost(){try{const sv=JSON.parse(ls.get('iplHostState'));if(sv)S=norm(sv)}catch(e){}genCodes();ls.set('iplHostState',JSON.stringify(S))}
+function startHost(){ls.set('iplCode',code);loadHost();
+peer=new Peer('iplauction-'+code);
+peer.on('connection',c=>{c.on('data',m=>onMsg(c,m));c.on('close',()=>{const had=conns.includes(c);conns=conns.filter(x=>x!==c);if(had&&mode==='host')render()});c.on('error',()=>{})});
+peer.on('error',e=>toast(e.type==='unavailable-id'?'This room is already open in another tab':'Network: '+e.type));render()}
+function leave(why){ls.set('iplRoom',null);ls.set('iplKey',null);ls.set('iplMode',null);mode=null;built=null;got=false;if(peer){try{peer.destroy()}catch(e){}peer=null}hc=null;try{history.replaceState(null,'',location.pathname)}catch(e){}if(why)toast(why);render()}
+function startClient(){const room=ls.get('iplRoom'),key=ls.get('iplKey');if(!room||!key)return leave();
+cstart=Date.now();peer=new Peer();
+peer.on('open',()=>{const c=hc=peer.connect('iplauction-'+room,{reliable:true});
+c.on('open',()=>{lastPong=Date.now();c.send({t:'join',key})});
+c.on('data',m=>{if(!m)return;lastPong=Date.now();
+if(m.t==='joined'){mode=m.team;ls.set('iplMode',m.team);S=norm(m.s);got=true;built=null;try{history.replaceState(null,'',location.pathname)}catch(e){}render()}
+else if(m.t==='state'){S=norm(m.s);got=true;render()}
+else if(m.t==='msg'){warn(m.m);toast(m.m)}
+else if(m.t==='denied'){if(m.soft){leave(m.why)}else leave(m.why)}});
+c.on('close',()=>reconnect())});
+peer.on('error',e=>{if(e.type==='peer-unavailable'){if(got)return reconnect();return leave('Room not found. Check the code and make sure the auctioneer has the page open')}reconnect()});render()}
+function reconnect(){if(rt||!mode||mode==='host'||mode==='join'&&!got&&!ls.get('iplKey'))return;rt=setTimeout(()=>{rt=0;if(!mode||mode==='host')return;if(peer){try{peer.destroy()}catch(e){}peer=null}hc=null;needPeer(startClient)},1800);render()}
+setInterval(()=>{if(!mode||mode==='host')return;if(hc&&hc.open){try{hc.send({t:'ping',v:S.v})}catch(e){}if(Date.now()-lastPong>15000){toast('Connection lost. Reconnecting…');lastPong=Date.now();hc=null;reconnect()}}else if(!rt&&cstart&&Date.now()-cstart>12000){cstart=Date.now();reconnect()}},4000);
+setInterval(()=>{const c=S.cur;if(mode!=='host'||S.phase!=='auction'||!c||!c.open||!c.auto)return;const k=Math.min(4,Math.floor((Date.now()-c.cdt)/(S.tick*1000)));if(k>=4){c.team?sell():unsold()}else if(k!==c.cd){c.cd=k;push()}},500);
+
+/* ---------- bidder actions ---------- */
+function tell(o){if(hc&&hc.open)hc.send(o);else toast('Not connected to the auctioneer yet')}
+function warn(m){const e=$('wm');if(e)e.textContent=m}
+function bid(amt){const c=S.cur;if(!c||!c.open)return;amt=r2(amt);if(!(c.team?amt>c.bid:amt>=c.base))return warn('Bid must be above '+fm(c.bid));const e=check(mode,pl(c.id),amt);if(e)return warn(e);warn('');if(!(hc&&hc.open))return warn('Not connected to the auctioneer yet. Reconnecting…');hc.send({t:'bid',b:{lot:c.n,pid:c.id,amt}})}
+function walkOut(){const c=S.cur;if(!c||!c.open)return;if(c.team===mode)return warn("You're leading, so you can't walk out");if((c.out||[]).includes(mode))return;if(!arm('wo:'+c.n))return;sendOut(c,0)}
+function sendOut(c,n){if(!(hc&&hc.open))return warn('Not connected to the auctioneer yet. Reconnecting…');hc.send({t:'out',b:{lot:c.n,pid:c.id}});setTimeout(()=>{const k=S.cur;if(k&&k.n===c.n&&k.team!==mode&&!(k.out||[]).includes(mode)&&n<3)sendOut(c,n+1)},1500)}
+
+/* ---------- shared view pieces ---------- */
+const LOGO='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#1a1204" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 5l6 6M11 7l6 6-3 3-6-6zM8 12l-5 5M3 21h9"/></svg>';
+function setH(id,h){const e=$(id);if(e&&e._h!==h){e.innerHTML=h;e._h=h}}
+function toast(m){const e=$('toast');e.textContent=m;e.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>e.classList.remove('on'),2600)}
+function ini(n){const w=n.trim().split(/\s+/);return(w[0][0]+(w.length>1?w[w.length-1][0]:'')).toUpperCase()}
+function chips(p){return`<span class="chip" style="--k:${RC[p.role]}">${RS[p.role]}</span><span class="chip">${dom(p)} · ${esc(p.country)}</span><span class="chip">Base ${fm(bp(p))}</span>`}
+function lastSale(){const a=S.log[S.log.length-1];if(!a)return'<span class="muted">Waiting for the auctioneer to bring the next player to the block.</span>';const p=pl(a.id);return a.a==='S'?`<div class="sold"><b>${esc(p.name)}</b> sold to <em style="color:${tm(a.t).c}">${a.t}</em> for ${fm(a.p)}</div>`:`<div class="sold"><b>${esc(p.name)}</b> went unsold</div>`}
+function callHtml(c){return c&&c.cd>0?`<div class="call">${['','Going once…','Going twice…','Going thrice. Last call!'][Math.min(3,c.cd)]}</div>`:''}
+function outHtml(c){const o=(c&&c.out)||[];return o.length?`<div class="outs">Walked out: ${o.join(', ')}</div>`:''}
+function lotHtml(c,viewer){
+if(S.phase!=='auction'){const m={finalise:['Auction over','Teams are finalising their squads.'],trade:['Trade window open','Teams can offer swaps and cash deals.'],done:['Auction complete','Trading is closed. Squads are final.']}[S.phase];return`<div class="lot idle"><div class="pill" style="align-self:flex-start">${m[0]}</div><div class="sold" style="margin-top:14px">${m[1]}</div></div>`}
+if(!c)return`<div class="lot idle"><div class="pill" style="align-self:flex-start">${rtxt()}</div><div style="margin-top:14px">${lastSale()}</div></div>`;
+const p=pl(c.id),lt=c.team?tm(c.team):null,you=viewer!=='host'&&c.team===viewer,key=c.n+':'+c.bid+':'+c.team,pop=key!==lastKey;lastKey=key;
+return`<div class="lot"><div class="lot-top"><span class="pill">${rtxt()}</span>${c.open?'<span class="live"><i></i>Live</span>':'<span class="paused">Paused</span>'}</div>
+<div class="lot-main"><div class="mono">${esc(ini(p.name))}</div><div style="min-width:0"><div class="pname">${esc(p.name)}</div><div class="chips">${chips(p)}</div></div></div>
+<div class="bidrow"><div><div class="lbl">${c.team?'Current bid':'Base price'}</div><div class="bidv ${pop?'pop':''}">${fmH(c.bid)}</div></div>
+<div class="leader ${you?'you':''}"><div class="lbl">${c.team?'Leading':''}</div><b>${you?'You':lt?lt.name:'No bids yet'}</b></div></div>${callHtml(c)}${outHtml(c)}</div>`}
+function rounds(){const left=PL.filter(eligible).length;const lab=S.phase==='auction'?`<b>${rtxt()}</b> · ${left} left`:`<b>${{finalise:'Finalising squads',trade:'Trade window',done:'Auction complete'}[S.phase]}</b>`;return`<div class="rlab">${lab}</div><div class="rsegs">${RD.map((r,i)=>`<i class="${S.phase!=='auction'||i<S.rd?'done':i===S.rd?'cur':''}"></i>`).join('')}</div>`}
+function squadHtml(i){return i.ros.length?`<div class="list">${i.ros.map(p=>`<div class="row-i"><div class="ri-l"><b>${esc(p.name)}</b><span>${RS[p.role]} · ${dom(p)} · ${esc(p.country)}</span></div><div class="ri-r">${fm(S.ps[p.id].p)}</div></div>`).join('')}</div>`:'<div class="empty">No players yet.</div>'}
+function teamsDetails(ids){return ids.map(id=>{const t=tm(id),i=info(id);return`<details data-t="${id}" ${openT.has(id)?'open':''}><summary style="color:${t.c}">${t.name}${gone(id)?' (removed)':''} <span class="muted">· ${i.ros.length} players · ${fm(i.left)} left · OS ${i.os}/8${risk(id)?' · ⚠ low funds':''}${S.fin[id]?' · ✓ final':''}</span></summary>${squadHtml(i)}</details>`}).join('')}
+function poolRows(rf,of,rv,q,click){const a=PL.filter(p=>(rv==='A'?(!S.ps[p.id]||S.ps[p.id].s==='U'):eligible(p))&&(!rf||p.role===rf)&&(!of||(of==='D')===(p.cc==='IN'))&&(!q||p.name.toLowerCase().includes(q)||p.country.toLowerCase().includes(q)));return{n:a.length,h:a.map(p=>`<div class="row-i ${click?'clk':''}" ${click?`data-a="pick" data-id="${p.id}"`:''}><div class="ri-l"><b>${esc(p.name)}</b><span>${RS[p.role]} · ${dom(p)} · ${esc(p.country)} · ${RD[rOf(p)]}${S.ps[p.id]?' · unsold':''}</span></div><div class="ri-r">${fm(bp(p))}${click?` <span class="ed" data-a="edit" data-id="${p.id}" title="Edit base price">✎</span>`:''}</div></div>`).join('')||'<div class="empty">No players match these filters.</div>'}}
+const roleOpts='<option value="">All roles</option>'+Object.keys(RL).map(k=>`<option value="${k}">${RL[k]}</option>`).join('');
+function tabsHtml(g,list){return`<div class="tabs" id="${g}tabs">${list.map(([k,l])=>`<button data-a="tab" data-g="${g}" data-t="${k}" id="${g}t-${k}">${l}</button>`).join('')}</div>`}
+function tabsSync(g,ids){ids.forEach(k=>{const b=$(g+'t-'+k),p=$(g+'p-'+k);if(b)b.classList.toggle('on',tab[g]===k);if(p)p.style.display=tab[g]===k?'':'none'})}
+
+/* ---------- screens ---------- */
+function render(){document.documentElement.style.setProperty('--lc',S.cur&&S.cur.team&&tm(S.cur.team)?tm(S.cur.team).c:(mode&&mode!=='host'&&tm(mode)?tm(mode).c:'#3b4a6b'));
+if(!mode)return pick();if(mode==='join'||(mode!=='host'&&!got))return connecting();if(mode==='host')return hostUI();bidUI()}
+function pick(){if(built==='pick')return;built='pick';$('app').className='app';$('app').innerHTML=`<div class="join"><div class="logo">${LOGO}</div><h1>IPL Auction Room</h1><p class="muted" style="margin:0 0 18px">Enter the code the auctioneer gave your team.</p><div class="card"><input id="jc" placeholder="XXXXX-XXXX" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="12"><button class="btn gold" data-a="join" style="width:100%;margin-top:10px;padding:13px">Join auction</button></div><div style="text-align:center;margin-top:22px"><button class="btn sm" data-a="host">I am the auctioneer</button></div></div>`}
+function connecting(){if(built==='conn')return;built='conn';$('app').className='app';$('app').innerHTML=`<div class="join" style="text-align:center"><div class="spin"></div><h1>Joining the auction…</h1><p class="muted">Connecting to the auctioneer. This takes a few seconds.</p><button class="btn sm" data-a="cancel" style="margin-top:12px">Cancel</button></div>`}
+
+function bidUI(){const t=tm(mode),oth=AT().filter(x=>x.id!==mode);
+if(built!==mode){built=mode;gets.clear();gives.clear();$('app').className='app b';$('app').innerHTML=`
+<header class="bar"><div class="brand"><div class="logo" style="background:${t.c};color:#0a0f1c">${t.id}</div><div style="min-width:0"><div class="eb">You are bidding as</div><h1>${t.name}</h1></div></div><div class="conn" id="cn"></div></header>
+<div id="rl"></div><div id="al"></div><div class="stats" id="st" style="--c:${t.c}"></div><div id="lot"></div>
+<div class="card" id="fp" style="display:none"><b>Finalise your squad</b><div class="muted" id="ft" style="margin:6px 0"></div><button class="btn gold" data-a="fin" id="fb" style="width:100%">Finalise my team</button></div>
+${tabsHtml('b',[['squad','My squad'],['teams','Teams'],['pool','Player pool'],['trade','Trades']])}
+<div id="bp-squad"><div id="ros"></div></div>
+<div id="bp-teams"><div id="oth"></div></div>
+<div id="bp-pool"><div class="muted" id="ph" style="margin-bottom:8px"></div><div class="row" style="margin-top:0"><input id="pq" placeholder="Search players"><select id="prf">${roleOpts}</select></div><div class="row"><select id="pof"><option value="">Domestic + overseas</option><option value="D">Domestic</option><option value="O">Overseas</option></select><select id="prv"><option value="R">This round</option><option value="A">All remaining</option></select></div><div class="list scroll" id="bpool" style="margin-top:8px"></div></div>
+<div id="bp-trade"><div class="card"><div class="card-h"><b>Make an offer</b></div><select id="tt"></select><div class="muted" style="margin:10px 0 4px">Players you want</div><div class="list scroll" id="tg" style="max-height:180px"></div><div class="muted" style="margin:10px 0 4px">Players you offer</div><div class="list scroll" id="tv" style="max-height:180px"></div><div class="row"><select id="td"><option value="pay">I pay</option><option value="ask">I want</option></select><input id="tc" type="number" inputmode="decimal" step="0.05" placeholder="Amount (₹ Cr)"></div><input id="tn" placeholder="Message (optional)" maxlength="80" style="margin-top:8px"><button class="btn gold" data-a="tsend" style="width:100%;margin-top:8px">Send offer</button><div class="warn" id="tw"></div></div><div class="card"><b>Incoming offers</b><div id="tin" style="margin-top:8px"></div></div><div class="card"><b>My offers</b><div id="tout" style="margin-top:8px"></div></div></div>
+<div class="dock" id="dock"><div class="dk"><div class="bb"><button class="btn gold" data-a="b1" id="b1"></button><button class="btn" data-a="b2" id="b2"></button></div><button class="btn red wo" data-a="wo" id="wo"></button><div class="warn" id="wm"></div></div></div>`;
+$('prf').onchange=$('pof').onchange=$('prv').onchange=$('pq').oninput=bpool}
+const i=info(mode),c=S.cur,ph=S.phase,n=i.ros.length;
+setH('rl',rounds());
+$('cn').innerHTML=`<span class="dot ${hc&&hc.open?'on':'warn'}"></span>${hc&&hc.open?'Connected':'Reconnecting…'}`;
+setH('st',[['Purse left',fm(i.left),Math.round(i.left/S.budget*100)+'% of purse'],['Squad',n+' / 25','minimum 15'],['Overseas',i.os+' / 8','maximum 8']].map(x=>`<div class="stat"><small>${x[0]}</small><div class="v">${x[1]}</div><small>${x[2]}</small></div>`).join(''));
+const al=[];if(risk(mode))al.push(`Squad incomplete (${n}/15) and funds below 25%. Only ${fm(i.left)} left for ${15-n} more players.`);if(ph==='finalise'&&n<15)al.push(`You can't finalise yet. You need ${15-n} more players.`);
+setH('al',al.map(a=>`<div class="alert">${a}</div>`).join(''));if(risk(mode)&&!wasRisk){toast('Low funds for your squad size');try{navigator.vibrate&&navigator.vibrate(200)}catch(e){}}wasRisk=risk(mode);
+setH('lot',lotHtml(c,mode));
+$('fp').style.display=ph==='finalise'?'':'none';$('dock').style.display=ph==='auction'?'':'none';$('app').classList.toggle('dk',ph==='auction');$('bt-trade').style.display=ph==='trade'?'':'none';if(ph!=='trade'&&tab.b==='trade')tab.b='squad';
+const isOut=!!(c&&(c.out||[]).includes(mode)),lead=!!(c&&c.team===mode),ok=ph==='auction'&&c&&c.open&&!lead&&!isOut;
+$('b1').disabled=$('b2').disabled=!ok;$('wo').disabled=!ok;
+$('b1').innerHTML=c?(c.team?`<small>+25 L</small><b>${fm(c.bid+.25)}</b>`:`<small>Open at base</small><b>${fm(c.base)}</b>`):'<small>Waiting</small><b>—</b>';
+$('b2').innerHTML=c?(c.team?`<small>+50 L</small><b>${fm(c.bid+.5)}</b>`:`<small>Base + 25 L</small><b>${fm(c.base+.25)}</b>`):'<small>Waiting</small><b>—</b>';
+$('wo').textContent=isOut?'You walked out of this player':lead?"You're leading, so you can't walk out":c&&armK==='wo:'+c.n?'Tap again to confirm walk out':'Walk out of this player';
+if(ph==='finalise'){$('ft').innerHTML=AT().map(x=>x.id+(S.fin[x.id]?' ✓':' …')).join(' · ')+(n<15?'<br>Need '+(15-n)+' more players to finalise (min 15).':'');$('fb').disabled=!!S.fin[mode]||n<15||n>25;$('fb').textContent=S.fin[mode]?'Finalised. Waiting for other teams':'Finalise my team'}
+if(ph==='trade'){fillTT();tlists();
+setH('tin',S.trades.filter(x=>x.to===mode&&x.st==='pending').map(tr=>`<div class="tm" style="--c:${tm(tr.from).c}">${tr.from} wants: ${esc(nm(tr.get))}<br>offers: ${esc(nm(tr.give))}${ct(tr)?'<br>'+ct(tr):''}${tr.note?'<br>“'+esc(tr.note)+'”':''}<div class="row"><button class="btn gold sm" data-a="top" data-op="accept" data-id="${tr.id}">Accept</button><button class="btn sm" data-a="top" data-op="reject" data-id="${tr.id}">Reject</button></div></div>`).join('')||'<div class="muted">No incoming offers.</div>');
+setH('tout',S.trades.filter(x=>x.from===mode).slice().reverse().map(tr=>`<div class="tm" style="--c:${tm(tr.to).c}">To ${tr.to}: want ${esc(nm(tr.get))} · offer ${esc(nm(tr.give))}${ct(tr)?' · '+ct(tr):''}<div class="muted">${tr.st}${tr.msg?' · '+esc(tr.msg):''}</div>${tr.st==='pending'?`<button class="btn sm" data-a="top" data-op="cancel" data-id="${tr.id}" style="margin-top:6px">Cancel offer</button>`:''}</div>`).join('')||'<div class="muted">No offers sent.</div>')}
+setH('ros',squadHtml(i));if(!$('oth').contains(document.activeElement)){const h=teamsDetails(oth.map(x=>x.id));if($('oth')._h!==h){$('oth').innerHTML=h;$('oth')._h=h;$('oth').querySelectorAll('details').forEach(d=>d.ontoggle=()=>{d.open?openT.add(d.dataset.t):openT.delete(d.dataset.t)})}}
+bpool();tabsSync('b',['squad','teams','pool','trade'])}
+const nm=ids=>ids.map(id=>pl(id).name).join(', ')||'—';
+const ct=tr=>tr.cash>0?tr.from+' pays '+fm(tr.cash):tr.cash<0?tr.from+' wants '+fm(-tr.cash):'';
+function fillTT(){const sel=$('tt'),ids=AT().filter(x=>x.id!==mode).map(x=>x.id),h=ids.join();if(sel._h!==h){const v=sel.value;sel.innerHTML=ids.map(id=>`<option value="${id}">Trade with ${tm(id).name}</option>`).join('');sel._h=h;if(ids.includes(v))sel.value=v}}
+function tlists(){const to=$('tt').value;if(!to)return;const chk=(k,p)=>`<label class="row-i"><span class="ri-l"><b>${esc(p.name)}</b><span>${RS[p.role]} · ${dom(p)} · ${fm(S.ps[p.id].p)}</span></span><input type="checkbox" data-k="${k}" data-id="${p.id}" ${(k==='g'?gets:gives).has(p.id)?'checked':''} style="width:auto"></label>`;
+setH('tg',info(to).ros.map(p=>chk('g',p)).join('')||'<div class="empty">No players</div>');setH('tv',info(mode).ros.map(p=>chk('v',p)).join('')||'<div class="empty">No players</div>')}
+function bpool(){const sold=PL.filter(p=>S.ps[p.id]&&S.ps[p.id].s==='S').length,r=poolRows($('prf').value,$('pof').value,$('prv').value,($('pq').value||'').toLowerCase(),false);$('ph').textContent=`${PL.length-sold} players left of ${PL.length} · ${sold} sold`;setH('bpool',r.h)}
+
+function hostUI(){
+if(built!=='host'){built='host';$('app').className='app';$('app').innerHTML=`
+<header class="bar"><div class="brand"><div class="logo">${LOGO}</div><div><div class="eb">Auctioneer console</div><h1>IPL Auction <span class="livetag"><i></i>Live</span></h1></div></div><div><button class="btn sm" data-a="undo" id="un">↶ Undo last</button></div></header>
+<div id="rl"></div><div class="tboard" id="tms"></div>
+<div class="hgrid"><section class="col"><div id="lot"></div>
+<div class="card"><button class="btn gold xl" data-a="sell" id="sl">SELL</button><div class="row"><button class="btn" data-a="unsold" id="us">Mark unsold</button><button class="btn" data-a="pause" id="ps">Pause</button><button class="btn" data-a="call" id="cl"></button></div><div class="row"><button class="btn" data-a="nx" id="nx">Next in order</button><button class="btn" data-a="rn" id="rn">Random player</button></div><div class="row"><button class="btn" data-a="auto" id="at"></button><button class="btn" data-a="ebase" id="eb">Edit base price</button></div></div>
+<div class="card"><div class="card-h"><b>Auction flow</b></div><div class="muted" id="fns"></div><div class="row"><button class="btn" data-a="nr" id="nr"></button><button class="btn gold" data-a="pe" id="pe">End auction</button></div><div class="row"><button class="btn" data-a="pb" id="pb">Back to auction</button><button class="btn red" data-a="pc" id="pc">Close trades</button></div></div></section>
+<section class="col">${tabsHtml('h',[['pool','Player pool'],['teams','Teams & codes'],['add','Add player'],['trades','Trades'],['log','Log'],['set','Settings']])}
+<div id="hp-pool"><div class="muted" id="hpt" style="margin-bottom:8px"></div><div class="row" style="margin-top:0"><input id="q" placeholder="Search players or country"><select id="rf">${roleOpts}</select></div><div class="row"><select id="of"><option value="">Domestic + overseas</option><option value="D">Domestic</option><option value="O">Overseas</option></select><select id="rv"><option value="R">This round</option><option value="A">All remaining</option></select></div><div class="list scroll" id="pool" style="margin-top:8px"></div></div>
+<div id="hp-teams"></div>
+<div id="hp-add"><div class="card"><div class="card-h"><b>Add a player to the pool</b></div><input id="an" placeholder="Player name" maxlength="40"><div class="row"><select id="ad"><option value="D">Domestic (India)</option><option value="O">Overseas</option></select><input id="ac" placeholder="Country (if overseas)" maxlength="24"></div><div class="row"><select id="ar">${Object.keys(RL).map(k=>`<option value="${k}">${RL[k]}</option>`).join('')}</select><input id="ab" type="number" step="0.05" placeholder="Base price (₹ Cr)"></div><div class="row"><select id="ao"><option value="">Round: by role</option>${RD.slice(0,7).map((r,i)=>`<option value="${i}">Round ${i+1} · ${r}</option>`).join('')}</select><button class="btn gold" data-a="addp">Add player</button></div></div></div>
+<div id="hp-trades"><div class="card"><b>Trade offers</b><div id="htr" style="margin-top:8px"></div></div><div class="card"><b>Team squads</b><div id="ros" style="margin-top:8px"></div></div></div>
+<div id="hp-log"><div class="list scroll" id="log"></div></div>
+<div id="hp-set"><div class="card"><b>Purse and timer</b><div class="row"><input id="bg" type="number" min="1" placeholder="Purse (₹ Cr)"><input id="tk" type="number" min="2" max="30" placeholder="Seconds per call"></div><div class="muted" style="margin-top:6px">The purse can only change before the first sale. The timer is used by auto mode.</div></div>
+<div class="card"><b>Fix a team's remaining purse</b><div class="muted" style="margin:4px 0 8px">Enter the new amount (₹ Cr), then tap Set.</div>${T.map(t=>`<div class="row"><span style="flex:0 0 52px;padding-top:11px;color:${t.c};font-weight:700">${t.id}</span><input id="f${t.id}" type="number" step="0.05"><button class="btn sm" data-a="setp" data-id="${t.id}" style="flex:0 0 70px">Set</button></div>`).join('')}</div>
+<div class="card"><b>Danger zone</b><div class="row"><button class="btn red" data-a="reset" id="rs"></button><button class="btn" data-a="lvh" id="lv"></button></div></div></div></section></div>`;
+$('q').oninput=$('rf').onchange=$('of').onchange=$('rv').onchange=hpool;
+$('bg').value=S.budget;$('tk').value=S.tick;$('tk').onchange=e=>{const n=Number(e.target.value);if(n>=2&&n<=30){S.tick=n;push()}else e.target.value=S.tick};$('bg').onchange=e=>{const n=Number(e.target.value);if(n>0&&!S.log.some(a=>a.a==='S')){S.budget=n;push()}else{e.target.value=S.budget;toast('The purse cannot change after a sale')}}}
+const c=S.cur,ph=S.phase;
+setH('rl',rounds());
+setH('tms',T.map(t=>{const i=info(t.id),on=online(t.id),g=gone(t.id);return`<div class="tc ${c&&c.team===t.id?'lead':''} ${g?'gone':''}" style="--c:${t.c}"><div class="h"><span class="id">${t.id}${S.fin[t.id]?' ✓':''}</span><span class="dot ${on?'on':''}" title="${g?'Removed':on?'Online':'Not joined'}"></span></div><div class="pv">${i.left.toFixed(2)}<small>Cr</small></div><div class="pb"><i style="width:${Math.max(0,Math.min(100,i.left/S.budget*100))}%"></i></div><div class="sm">${i.ros.length}/25 players · OS ${i.os}/8</div>${g?'<div class="fl">Removed</div>':c&&(c.out||[]).includes(t.id)?'<div class="fl">Walked out</div>':risk(t.id)?'<div class="fl">Low funds</div>':''}</div>`}).join(''));
+setH('lot',lotHtml(c,'host')+(c&&c.team&&AT().filter(x=>x.id!==c.team).every(x=>(c.out||[]).includes(x.id))?'<div class="alert" style="margin:-4px 0 14px">All other teams walked out. You can sell now.</div>':''));
+$('fns').textContent=ph==='finalise'?'Finalised: '+AT().map(x=>x.id+(S.fin[x.id]?' ✓':' …')).join('  '):ph==='auction'?'Round '+(S.rd+1)+' of 8 · '+PL.filter(eligible).length+' players left in this round':'';
+$('pe').disabled=ph!=='auction'||!!c;$('pb').disabled=ph!=='finalise';$('pc').disabled=ph!=='trade';
+$('sl').disabled=!(c&&c.team);$('sl').textContent=c&&c.team?`SELL TO ${c.team} · ${fm(c.bid)}`:'SELL';$('us').disabled=!c;$('ps').disabled=!c;$('ps').textContent=c&&!c.open?'Resume bidding':'Pause';$('un').disabled=!S.log.length||ph!=='auction';$('nx').disabled=$('rn').disabled=!!c||ph!=='auction';
+$('nr').textContent=S.rd===6?'Start unsold round':S.rd>=7?'Final round (unsold)':'Next round';$('nr').disabled=ph!=='auction'||!!c||S.rd>=7;$('cl').textContent=['Going once','Going twice','Going thrice','Hammer: SOLD'][c?Math.min(3,c.cd||0):0];$('cl').disabled=!c||!c.open;$('eb').disabled=!c||!!c.team;$('at').textContent='Auto timer: '+(S.autoOn?'on':'off');
+$('rs').textContent=armK==='reset'?'Tap again to reset':'Reset auction';$('lv').textContent=armK==='lvh'?'Tap again to leave':'Leave console';
+T.forEach(t=>{const e=$('f'+t.id);if(e&&document.activeElement!==e)e.value=info(t.id).left});
+hpool();
+setH('hp-teams',`<div class="card"><div class="card-h"><b>Team codes</b><button class="btn sm gold" data-a="shareall">Copy all codes</button></div><div class="muted">Each team joins with its own code. Remove a team that isn't coming and it can no longer bid or hold up finalising. A new code signs the old device out.</div></div>`+T.map(t=>{const on=online(t.id),g=gone(t.id);return`<div class="tm ${g?'gone':''}" style="--c:${t.c}"><div class="tm-h"><span class="dot ${on?'on':''}"></span><b>${t.name}</b><span class="muted">${g?'Removed':on?'Online':'Not joined'}</span></div><div class="code">${full(t.id)}</div><div class="row"><button class="btn sm" data-a="copy" data-id="${t.id}">Copy code</button><button class="btn sm" data-a="link" data-id="${t.id}">Copy link</button><button class="btn sm" data-a="newc" data-id="${t.id}">${armK==='nc:'+t.id?'Tap to confirm':'New code'}</button>${g?`<button class="btn sm gold" data-a="rest" data-id="${t.id}">Restore</button>`:`<button class="btn sm red" data-a="rm" data-id="${t.id}">${armK==='rm:'+t.id?'Tap to confirm':'Remove'}</button>`}</div></div>`}).join(''));
+setH('htr',S.trades.slice().reverse().map(tr=>`<div class="tm" style="--c:${tm(tr.from).c}">#${tr.id} ${tr.from} → ${tr.to}<br>wants ${esc(nm(tr.get))} · offers ${esc(nm(tr.give))}${ct(tr)?' · '+ct(tr):''}${tr.note?' · “'+esc(tr.note)+'”':''}<div class="muted">${tr.st}${tr.msg?' · '+esc(tr.msg):''}</div></div>`).join('')||'<div class="muted">No offers yet.</div>');
+setH('ros',teamsDetails(T.map(x=>x.id)));$('ros').querySelectorAll('details').forEach(d=>d.ontoggle=()=>{d.open?openT.add(d.dataset.t):openT.delete(d.dataset.t)});
+setH('log',[...S.log].reverse().map(a=>`<div class="row-i"><div class="ri-l"><b>${esc(pl(a.id).name)}</b><span>${a.a==='S'?'Sold to '+a.t:'Unsold'}</span></div><div class="ri-r">${a.a==='S'?fm(a.p):''}</div></div>`).join('')||'<div class="empty">Nothing yet.</div>');
+tabsSync('h',['pool','teams','add','trades','log','set'])}
+function hpool(){const r=poolRows($('rf').value,$('of').value,$('rv').value,($('q').value||'').toLowerCase(),true);$('hpt').textContent=`${r.n} shown · ${PL.filter(p=>S.ps[p.id]&&S.ps[p.id].s==='S').length} of ${PL.length} sold · tap a player to bring them to the block`;setH('pool',r.h)}
+
+/* ---------- clicks ---------- */
+document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b||b.disabled)return;const a=b.dataset.a,d=b.dataset,id=d.id;
+switch(a){
+case'join':{const p=parse($('jc').value);if(!p)return toast('Enter the full team code, like ABCDE-WXYZ');ls.set('iplRoom',p.room);ls.set('iplKey',p.key);ls.set('iplMode',null);mode='join';got=false;built=null;render();needPeer(startClient);break}
+case'host':mode='host';ls.set('iplMode','host');built=null;loadHost();needPeer(startHost);render();break;
+case'cancel':leave();break;
+case'tab':tab[d.g]=d.t;render();break;
+case'undo':undo();break;case'sell':sell();break;case'unsold':unsold();break;case'nx':nextP(false);break;case'rn':nextP(true);break;case'call':callStep();break;case'auto':toggleAuto();break;case'nr':nextRound();break;case'pe':endAuction();break;case'pb':backAuction();break;case'pc':closeTrade();break;case'addp':addPlayer();break;
+case'pause':if(S.cur){S.cur.open=!S.cur.open;S.cur.cd=0;S.cur.cdt=Date.now();push()}break;
+case'ebase':if(S.cur)editBase(S.cur.id);break;
+case'edit':editBase(id);break;
+case'pick':{if(S.cur||S.phase!=='auction')return toast(S.cur?'Sell or mark unsold first':'The auction phase is over');const p=pl(id);if(!eligible(p))return toast('Not in this round ('+RD[rOf(p)]+')');nominate(id);break}
+case'copy':cp(full(id),id+' code copied');break;
+case'link':cp(link(id),id+' invite link copied');break;
+case'shareall':cp('IPL Auction · join with your team code\n'+T.map(t=>t.name+': '+full(t.id)).join('\n')+'\n\nOpen: '+location.origin+location.pathname,'All codes copied');break;
+case'newc':if(arm('nc:'+id))newCode(id);break;
+case'rm':if(arm('rm:'+id))removeTeam(id);break;
+case'rest':restoreTeam(id);break;
+case'setp':{const v=parseFloat($('f'+id).value);if(!(v>=0))return toast('Enter a valid amount');S.adj[id]=r2(v-(S.budget-info(id).spent));push();toast(id+' purse set to '+fm(v));break}
+case'reset':if(arm('reset')){const k=S;S=Object.assign(NEW(),{budget:k.budget,seq:k.seq+1,bp:k.bp,custom:k.custom,cseq:k.cseq,tick:k.tick,autoOn:k.autoOn,codes:k.codes,gone:k.gone,v:k.v});push()}break;
+case'lvh':if(arm('lvh')){ls.set('iplMode',null);mode=null;built=null;if(peer){try{peer.destroy()}catch(e){}peer=null}conns=[];render()}break;
+case'b1':{const c=S.cur;if(c)bid(c.team?c.bid+.25:c.base);break}
+case'b2':{const c=S.cur;if(c)bid(c.team?c.bid+.5:c.base+.25);break}
+case'wo':walkOut();break;
+case'fin':tell({t:'fin'});break;
+case'tsend':{const v=parseFloat($('tc').value)||0,cash=$('td').value==='pay'?v:-v;if(!gets.size&&!gives.size&&!v)return $('tw').textContent='Choose players or an amount';tell({t:'trade',op:'new',tr:{to:$('tt').value,get:[...gets],give:[...gives],cash,note:$('tn').value}});gets.clear();gives.clear();$('tc').value='';$('tn').value='';$('tw').textContent='Offer sent';tlists();break}
+case'top':tell({t:'trade',op:d.op,id:+id});break}});
+document.addEventListener('change',e=>{const el=e.target;if(el.dataset&&el.dataset.k){const set=el.dataset.k==='g'?gets:gives;el.checked?set.add(el.dataset.id):set.delete(el.dataset.id)}else if(el.id==='tt'){gets.clear();tlists()}});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'){if(e.target.id==='jc')document.querySelector('[data-a=join]').click();}});
+
+if(mode==='host'){loadHost();needPeer(startHost)}else if(mode)needPeer(startClient);
+render();
+</script></body></html>
